@@ -1,13 +1,18 @@
-ARG ARCH="amd64"
-ARG OS="linux"
-FROM alpine:3
-RUN apk --no-cache add freeipmi
-LABEL maintainer="The Prometheus Authors <prometheus-developers@googlegroups.com>"
+FROM golang:1.19 as builder
 
-ARG ARCH="amd64"
-ARG OS="linux"
-COPY .build/${OS}-${ARCH}/ipmi_exporter /bin/ipmi_exporter
+
+RUN go version
+RUN  go env -w GOPROXY=https://goproxy.io,direct
+RUN  go env -w GO111MODULE=on
+
+COPY . /go/src/ipmi_exporter/
+WORKDIR /go/src/ipmi_exporter/
+
+RUN make build
+
+FROM k8s.gcr.io/debian-base:v2.0.0
+COPY --from=builder /go/src/ipmi_exporter/ /
+COPY --from=builder /go/src/ipmi_exporter/ /etc/ipmi_exporter
 
 EXPOSE      9290
-USER        nobody
-ENTRYPOINT  [ "/bin/ipmi_exporter" ]
+ENTRYPOINT  [ "/etc/ipmi_exporter" ]

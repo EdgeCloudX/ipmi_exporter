@@ -12,12 +12,20 @@
 # limitations under the License.
 
 # Override the default common all.
-.PHONY: all
-all: precheck style unused build test
+CGO_ENABLED:=0
+DOCKER_PLATFORMS=linux/arm64,linux/amd64
+REGISTRY=harbor.ctyuncdn.cn/ecf-edge/prometheus/ipmi_exporter
+TAG?=0.0.1
+IMAGE:=$(REGISTRY)/ipmi_exporter:$(TAG)
+ifeq ($(ENABLE_JOURNALD), 1)
+	CGO_ENABLED:=1
+	LOGCOUNTER=./bin/log-counter
+endif
 
-#DOCKER_ARCHS      ?= amd64 arm64
-DOCKER_ARCHS      ?= amd64
-DOCKER_IMAGE_NAME ?= ipmi-exporter
-DOCKER_REPO       ?= prometheuscommunity
+package:
+	docker buildx create --use
+	docker buildx build  --platform $(DOCKER_PLATFORMS) -t $(IMAGE)  --push .
+	#docker buildx build  --platform=linux/arm64,linux/amd64 -t $(IMAGE) --push.
 
-include Makefile.common
+build: $(PKG_SOURCES)
+	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GO111MODULE=on go build  -o kube-state-metrics
