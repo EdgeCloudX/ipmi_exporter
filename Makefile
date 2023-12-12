@@ -14,7 +14,8 @@
 # Override the default common all.
 CGO_ENABLED:=0
 DOCKER_PLATFORMS=linux/arm64,linux/amd64
-REGISTRY=harbor.ctyuncdn.cn/ecf-edge/prometheus/ipmi_exporter
+REGISTRY=harbor.ctyuncdn.cn/ecf-edge-dev/prometheus/ipmi_exporter
+#REGISTRY=tjldockerdemo/ipmi_exporter
 TAG?=0.0.1
 IMAGE:=$(REGISTRY)/ipmi_exporter:$(TAG)
 ifeq ($(ENABLE_JOURNALD), 1)
@@ -24,7 +25,7 @@ endif
 
 package:
 	docker buildx create --use
-	docker buildx build  --platform $(DOCKER_PLATFORMS) -t $(IMAGE)  --push .
+	docker buildx build  --platform $(DOCKER_PLATFORMS) -t $(IMAGE) --push .
 	#docker buildx build  --platform=linux/arm64,linux/amd64 -t $(IMAGE) --push.
 
 build: $(PKG_SOURCES)
