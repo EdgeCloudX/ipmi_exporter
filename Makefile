@@ -29,4 +29,4 @@ package:
 	#docker buildx build  --platform=linux/arm64,linux/amd64 -t $(IMAGE) --push.
 
 build: $(PKG_SOURCES)
-	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GO111MODULE=on go build  -o kube-state-metrics
+	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GO111MODULE=on go build  -o ipmi_exporter
