@@ -58,7 +58,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.DEV_HARBOR_USERNAME }}
-          password: ${{ secrets.DEV_HARBOR_TOKEN }}
+          username: ${{ secrets.PRO_HARBOR_USERNAME }}
+          password: ${{ secrets.PRO_HARBOR_TOKEN }}
       - name: Build & Push Docker image
         run: make package
