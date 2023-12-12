@@ -53,6 +53,7 @@ jobs:
         with:
           go-version: 1.19
       - name: Login to DockerHub
+        run: echo Harbor Username： ${{ secrets.PRO_HARBOR_USERNAME }}
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
