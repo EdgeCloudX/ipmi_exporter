@@ -40,7 +40,7 @@ jobs:
   docker-image-develop:
     if: startsWith(github.ref_name, vars.DEV_BRANCH)
     env:
-      REGISTRY: ${{ vars.DEV_REGISTRY }}
+      REGISTRY: ${{ vars.PRO_REGISTRY }}
     name: Build x86 and arm Image develop
     runs-on:
       group: Default
@@ -60,5 +60,5 @@ jobs:
           registry: ${{ vars.PRO_REGISTRY }}
           username: ${{ secrets.DEV_HARBOR_USERNAME }}
           password: ${{ secrets.DEV_HARBOR_TOKEN }}
-      - name: Build & Push Docker image
-        run: make package
+      # - name: Build & Push Docker image
+      #   run: make package
